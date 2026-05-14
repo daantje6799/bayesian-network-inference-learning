@@ -1,0 +1,346 @@
+network unknown {
+}
+variable PR {
+  type discrete [ 2 ] { positive, negative };
+}
+variable Platelets {
+  type discrete [ 2 ] { lt_400, ge_400 };
+}
+variable Survival1yr {
+  type discrete [ 2 ] { yes, no };
+}
+variable LVSI {
+  type discrete [ 2 ] { no, yes };
+}
+variable LNM {
+  type discrete [ 2 ] { no, yes };
+}
+variable CA125 {
+  type discrete [ 2 ] { lt_35, ge_35 };
+}
+variable Histology {
+  type discrete [ 3 ] { grade_1, grade_2, grade_3 };
+}
+variable p53 {
+  type discrete [ 2 ] { wildtype, mutant };
+}
+variable PrimaryTumor {
+  type discrete [ 3 ] { grade_1, grade_2, grade_3 };
+}
+variable Therapy {
+  type discrete [ 4 ] { no, radiotx, chemotx, chemoradiotx };
+}
+variable Survival3yr {
+  type discrete [ 2 ] { yes, no };
+}
+variable L1CAM {
+  type discrete [ 2 ] { negative, positive };
+}
+variable MyometrialInvasion {
+  type discrete [ 3 ] { no, lt_50, ge_50 };
+}
+variable ER {
+  type discrete [ 2 ] { positive, negative };
+}
+variable Recurrence {
+  type discrete [ 3 ] { no, regional_distant, local };
+}
+variable Cytology {
+  type discrete [ 2 ] { no, yes };
+}
+variable Survival5yr {
+  type discrete [ 2 ] { yes, no };
+}
+variable CTMRI {
+  type discrete [ 2 ] { no, yes };
+}
+probability ( PR | ER, Histology, LNM ) {
+  (positive, grade_1, no) 0.9933025034, 0.006697496614;
+  (positive, grade_1, yes) 0.5887903022, 0.4112096978;
+  (positive, grade_2, no) 0.8283551173, 0.1716448827;
+  (positive, grade_2, yes) 0.9739161101, 0.0260838899;
+  (positive, grade_3, no) 0.5952238643, 0.4047761357;
+  (positive, grade_3, yes) 0.7776364464, 0.2223635536;
+  (negative, grade_1, no) 0.568725572, 0.431274428;
+  (negative, grade_1, yes) 0.003696887343, 0.9963031127;
+  (negative, grade_2, no) 0.7166742209, 0.2833257791;
+  (negative, grade_2, yes) 0.003214829956, 0.99678517;
+  (negative, grade_3, no) 0.06269421127, 0.9373057887;
+  (negative, grade_3, yes) 5.507830048e-07, 0.9999994492;
+}
+probability ( Platelets | LNM ) {
+  (no) 0.9810027839, 0.0189972161;
+  (yes) 0.9433474251, 0.05665257488;
+}
+probability ( Survival1yr | Recurrence, Therapy, Survival3yr ) {
+  (no, no, yes) 0.9999999959, 4.08163262e-09;
+  (no, no, no) 0.5, 0.5;
+  (no, radiotx, yes) 0.9999999937, 6.289308097e-09;
+  (no, radiotx, no) 0.5, 0.5;
+  (no, chemotx, yes) 0.9999999091, 9.090907438e-08;
+  (no, chemotx, no) 0.5, 0.5;
+  (no, chemoradiotx, yes) 0.9999999091, 9.090907438e-08;
+  (no, chemoradiotx, no) 0.5, 0.5;
+  (regional_distant, no, yes) 0.9999999333, 6.666665778e-08;
+  (regional_distant, no, no) 0.8888888025, 0.1111111975;
+  (regional_distant, radiotx, yes) 0.9999999333, 6.666665778e-08;
+  (regional_distant, radiotx, no) 0.6666666296, 0.3333333704;
+  (regional_distant, chemotx, yes) 0.9999995, 4.999995e-07;
+  (regional_distant, chemotx, no) 0.8749999063, 0.1250000937;
+  (regional_distant, chemoradiotx, yes) 0.99999975, 2.49999875e-07;
+  (regional_distant, chemoradiotx, no) 0.3333334444, 0.6666665556;
+  (local, no, yes) 0.9999996667, 3.333331111e-07;
+  (local, no, no) 9.99998e-07, 0.999999;
+  (local, radiotx, yes) 0.9999995, 4.999995e-07;
+  (local, radiotx, no) 0.5, 0.5;
+  (local, chemotx, yes) 0.999999, 9.99998e-07;
+  (local, chemotx, no) 9.99998e-07, 0.999999;
+  (local, chemoradiotx, yes) 0.5, 0.5;
+  (local, chemoradiotx, no) 9.99998e-07, 0.999999;
+}
+probability ( LVSI | Cytology, Histology, Therapy ) {
+  (no, grade_1, no) 0.9538461469, 0.04615385314;
+  (no, grade_1, radiotx) 0.8904109482, 0.1095890518;
+  (no, grade_1, chemotx) 9.99998e-07, 0.999999;
+  (no, grade_1, chemoradiotx) 0.749999875, 0.250000125;
+  (no, grade_2, no) 0.9626168138, 0.03738318622;
+  (no, grade_2, radiotx) 0.8695652067, 0.1304347933;
+  (no, grade_2, chemotx) 0.99999975, 2.49999875e-07;
+  (no, grade_2, chemoradiotx) 0.3333333704, 0.6666666296;
+  (no, grade_3, no) 0.5, 0.5;
+  (no, grade_3, radiotx) 0.621621615, 0.378378385;
+  (no, grade_3, chemotx) 0.5, 0.5;
+  (no, grade_3, chemoradiotx) 0.3333333889, 0.6666666111;
+  (yes, grade_1, no) 0.999999, 9.99998e-07;
+  (yes, grade_1, radiotx) 0.999999, 9.99998e-07;
+  (yes, grade_1, chemotx) 0.5, 0.5;
+  (yes, grade_1, chemoradiotx) 0.5, 0.5;
+  (yes, grade_2, no) 0.99999975, 2.49999875e-07;
+  (yes, grade_2, radiotx) 0.3333334444, 0.6666665556;
+  (yes, grade_2, chemotx) 0.5, 0.5;
+  (yes, grade_2, chemoradiotx) 0.5, 0.5;
+  (yes, grade_3, no) 3.333331111e-07, 0.9999996667;
+  (yes, grade_3, radiotx) 4.999995e-07, 0.9999995;
+  (yes, grade_3, chemotx) 4.999995e-07, 0.9999995;
+  (yes, grade_3, chemoradiotx) 0.5, 0.5;
+}
+probability ( LNM | Histology, LVSI, MyometrialInvasion, Therapy ) {
+  (grade_1, no, no, no) 0.6760152032, 0.3239847968;
+  (grade_1, no, no, radiotx) 0.909648981, 0.09035101898;
+  (grade_1, no, no, chemotx) 0.5, 0.5;
+  (grade_1, no, no, chemoradiotx) 0.9999507942, 4.920578268e-05;
+  (grade_1, no, lt_50, no) 0.9480863877, 0.05191361231;
+  (grade_1, no, lt_50, radiotx) 0.5230318993, 0.4769681007;
+  (grade_1, no, lt_50, chemotx) 0.5, 0.5;
+  (grade_1, no, lt_50, chemoradiotx) 0.9999872935, 1.270651931e-05;
+  (grade_1, no, ge_50, no) 0.8782931693, 0.1217068307;
+  (grade_1, no, ge_50, radiotx) 0.9494937372, 0.05050626277;
+  (grade_1, no, ge_50, chemotx) 0.5, 0.5;
+  (grade_1, no, ge_50, chemoradiotx) 0.999982117, 1.788302617e-05;
+  (grade_1, yes, no, no) 0.9999835923, 1.640773238e-05;
+  (grade_1, yes, no, radiotx) 0.5464869015, 0.4535130985;
+  (grade_1, yes, no, chemotx) 0.9999977627, 2.237334337e-06;
+  (grade_1, yes, no, chemoradiotx) 0.9999790145, 2.098545947e-05;
+  (grade_1, yes, lt_50, no) 0.9999190173, 8.098272141e-05;
+  (grade_1, yes, lt_50, radiotx) 0.5417442809, 0.4582557191;
+  (grade_1, yes, lt_50, chemotx) 0.9999915325, 8.467503268e-06;
+  (grade_1, yes, lt_50, chemoradiotx) 0.9999743274, 2.567261754e-05;
+  (grade_1, yes, ge_50, no) 0.9999821986, 1.780135663e-05;
+  (grade_1, yes, ge_50, radiotx) 0.6030585039, 0.3969414961;
+  (grade_1, yes, ge_50, chemotx) 0.9999977009, 2.299135073e-06;
+  (grade_1, yes, ge_50, chemoradiotx) 0.9999989052, 1.094808276e-06;
+  (grade_2, no, no, no) 0.3979550397, 0.6020449603;
+  (grade_2, no, no, radiotx) 0.7012967152, 0.2987032848;
+  (grade_2, no, no, chemotx) 0.0009117574789, 0.9990882425;
+  (grade_2, no, no, chemoradiotx) 0.3642728851, 0.6357271149;
+  (grade_2, no, lt_50, no) 0.399787051, 0.600212949;
+  (grade_2, no, lt_50, radiotx) 0.5365326015, 0.4634673985;
+  (grade_2, no, lt_50, chemotx) 0.0002991279163, 0.9997008721;
+  (grade_2, no, lt_50, chemoradiotx) 0.2862603958, 0.7137396042;
+  (grade_2, no, ge_50, no) 0.1327161091, 0.8672838909;
+  (grade_2, no, ge_50, radiotx) 0.6202356212, 0.3797643788;
+  (grade_2, no, ge_50, chemotx) 0.00135534347, 0.9986446565;
+  (grade_2, no, ge_50, chemoradiotx) 0.2560573995, 0.7439426005;
+  (grade_2, yes, no, no) 0.6216359644, 0.3783640356;
+  (grade_2, yes, no, radiotx) 0.4652429223, 0.5347570777;
+  (grade_2, yes, no, chemotx) 0.5, 0.5;
+  (grade_2, yes, no, chemoradiotx) 0.8226975103, 0.1773024897;
+  (grade_2, yes, lt_50, no) 0.4123155341, 0.5876844659;
+  (grade_2, yes, lt_50, radiotx) 0.3985303553, 0.6014696447;
+  (grade_2, yes, lt_50, chemotx) 0.5, 0.5;
+  (grade_2, yes, lt_50, chemoradiotx) 0.4759007184, 0.5240992816;
+  (grade_2, yes, ge_50, no) 0.1851289886, 0.8148710114;
+  (grade_2, yes, ge_50, radiotx) 0.5039025872, 0.4960974128;
+  (grade_2, yes, ge_50, chemotx) 0.5, 0.5;
+  (grade_2, yes, ge_50, chemoradiotx) 0.9927054309, 0.007294569071;
+  (grade_3, no, no, no) 0.2935021158, 0.7064978842;
+  (grade_3, no, no, radiotx) 0.302890305, 0.697109695;
+  (grade_3, no, no, chemotx) 0.01280279337, 0.9871972066;
+  (grade_3, no, no, chemoradiotx) 1.203388289e-06, 0.9999987966;
+  (grade_3, no, lt_50, no) 0.7345888612, 0.2654111388;
+  (grade_3, no, lt_50, radiotx) 0.2390499264, 0.7609500736;
+  (grade_3, no, lt_50, chemotx) 0.009903835349, 0.9900961647;
+  (grade_3, no, lt_50, chemoradiotx) 1.698656857e-06, 0.9999983013;
+  (grade_3, no, ge_50, no) 0.8517807257, 0.1482192743;
+  (grade_3, no, ge_50, radiotx) 0.1725185309, 0.8274814691;
+  (grade_3, no, ge_50, chemotx) 0.7363675167, 0.2636324833;
+  (grade_3, no, ge_50, chemoradiotx) 1.731043217e-06, 0.999998269;
+  (grade_3, yes, no, no) 0.1859493938, 0.8140506062;
+  (grade_3, yes, no, radiotx) 0.2173602096, 0.7826397904;
+  (grade_3, yes, no, chemotx) 0.1323605626, 0.8676394374;
+  (grade_3, yes, no, chemoradiotx) 0.2262988737, 0.7737011263;
+  (grade_3, yes, lt_50, no) 0.1748114583, 0.8251885417;
+  (grade_3, yes, lt_50, radiotx) 0.9162299745, 0.08377002549;
+  (grade_3, yes, lt_50, chemotx) 0.430691042, 0.569308958;
+  (grade_3, yes, lt_50, chemoradiotx) 0.9679683862, 0.03203161376;
+  (grade_3, yes, ge_50, no) 0.7275052637, 0.2724947363;
+  (grade_3, yes, ge_50, radiotx) 0.0002562241315, 0.9997437759;
+  (grade_3, yes, ge_50, chemotx) 0.9103407615, 0.08965923854;
+  (grade_3, yes, ge_50, chemoradiotx) 0.04856329118, 0.9514367088;
+}
+probability ( CA125 | LNM ) {
+  (no) 0.8628990852, 0.1371009148;
+  (yes) 0.7953853118, 0.2046146882;
+}
+probability ( Histology | Cytology, MyometrialInvasion, PrimaryTumor ) {
+  (no, no, grade_1) 0.5807964183, 0.4181875856, 0.00101599613;
+  (no, no, grade_2) 0.02458397555, 0.9362516768, 0.03916434767;
+  (no, no, grade_3) 0.02911138252, 0.2614714795, 0.7094171379;
+  (no, lt_50, grade_1) 0.2932985969, 0.7043277083, 0.002373694743;
+  (no, lt_50, grade_2) 0.03499916257, 0.499913129, 0.4650877085;
+  (no, lt_50, grade_3) 0.02123903925, 0.03056967164, 0.9481912891;
+  (no, ge_50, grade_1) 0.8525655817, 0.02029922553, 0.1271351928;
+  (no, ge_50, grade_2) 0.6887837101, 0.3104889737, 0.0007273161956;
+  (no, ge_50, grade_3) 0.1060588788, 0.1550315164, 0.7389096048;
+  (yes, no, grade_1) 0.1633132584, 0.5590573828, 0.2776293589;
+  (yes, no, grade_2) 6.275995344e-07, 0.5751188012, 0.4248805713;
+  (yes, no, grade_3) 6.782438515e-07, 6.782438515e-07, 0.9999986435;
+  (yes, lt_50, grade_1) 0.1134988901, 0.4726162579, 0.413884852;
+  (yes, lt_50, grade_2) 1.337003076e-06, 0.6277366079, 0.3722620551;
+  (yes, lt_50, grade_3) 1.722571921e-06, 1.722571921e-06, 0.9999965549;
+  (yes, ge_50, grade_1) 0.3330232293, 0.4194291801, 0.2475475906;
+  (yes, ge_50, grade_2) 1.518153761e-06, 0.9323197078, 0.06767877408;
+  (yes, ge_50, grade_3) 1.058105048e-06, 1.058105048e-06, 0.9999978838;
+}
+probability ( p53 | Histology, L1CAM, LNM ) {
+  (grade_1, negative, no) 0.9427865247, 0.05721347529;
+  (grade_1, negative, yes) 0.9995221161, 0.0004778838551;
+  (grade_1, positive, no) 0.9999670557, 3.294426011e-05;
+  (grade_1, positive, yes) 0.9999996633, 3.36740054e-07;
+  (grade_2, negative, no) 0.8974531023, 0.1025468977;
+  (grade_2, negative, yes) 0.8639954275, 0.1360045725;
+  (grade_2, positive, no) 0.6135097112, 0.3864902888;
+  (grade_2, positive, yes) 0.6166040506, 0.3833959494;
+  (grade_3, negative, no) 0.66873225, 0.33126775;
+  (grade_3, negative, yes) 0.5808940582, 0.4191059418;
+  (grade_3, positive, no) 0.08602429506, 0.9139757049;
+  (grade_3, positive, yes) 0.5688112228, 0.4311887772;
+}
+probability ( PrimaryTumor ) {
+  table 0.6299999982, 0.2040000008, 0.166000001;
+}
+probability ( Therapy | Histology ) {
+  (grade_1) 0.6238095167, 0.3523809504, 0.004761909433, 0.01904762345;
+  (grade_2) 0.5663265242, 0.3673469364, 0.02040816795, 0.04591837151;
+  (grade_3) 0.3297872306, 0.41489361, 0.1914893642, 0.06382979516;
+}
+probability ( Survival3yr | Recurrence, Therapy, Survival5yr ) {
+  (no, no, yes) 0.9999999959, 4.098360622e-09;
+  (no, no, no) 0.999999, 9.99998e-07;
+  (no, radiotx, yes) 0.9999999937, 6.289308097e-09;
+  (no, radiotx, no) 0.5, 0.5;
+  (no, chemotx, yes) 0.9999999091, 9.090907438e-08;
+  (no, chemotx, no) 0.5, 0.5;
+  (no, chemoradiotx, yes) 0.9999999091, 9.090907438e-08;
+  (no, chemoradiotx, no) 0.5, 0.5;
+  (regional_distant, no, yes) 0.9999999231, 7.692306509e-08;
+  (regional_distant, no, no) 0.1818182397, 0.8181817603;
+  (regional_distant, radiotx, yes) 0.9999999231, 7.692306509e-08;
+  (regional_distant, radiotx, no) 0.1818182397, 0.8181817603;
+  (regional_distant, chemotx, yes) 0.999999, 9.99998e-07;
+  (regional_distant, chemotx, no) 0.1111111975, 0.8888888025;
+  (regional_distant, chemoradiotx, yes) 0.99999975, 2.49999875e-07;
+  (regional_distant, chemoradiotx, no) 3.333331111e-07, 0.9999996667;
+  (local, no, yes) 0.9999995, 4.999995e-07;
+  (local, no, no) 0.5, 0.5;
+  (local, radiotx, yes) 0.999999, 9.99998e-07;
+  (local, radiotx, no) 0.999999, 9.99998e-07;
+  (local, chemotx, yes) 0.999999, 9.99998e-07;
+  (local, chemotx, no) 9.99998e-07, 0.999999;
+  (local, chemoradiotx, yes) 0.5, 0.5;
+  (local, chemoradiotx, no) 9.99998e-07, 0.999999;
+}
+probability ( L1CAM | Histology, LNM, PR ) {
+  (grade_1, no, positive) 0.9998287077, 0.0001712922971;
+  (grade_1, no, negative) 0.9996946165, 0.0003053835453;
+  (grade_1, yes, positive) 0.951125486, 0.04887451397;
+  (grade_1, yes, negative) 0.871829912, 0.128170088;
+  (grade_2, no, positive) 0.9985863257, 0.001413674339;
+  (grade_2, no, negative) 0.6924669153, 0.3075330847;
+  (grade_2, yes, positive) 0.9535614134, 0.04643858664;
+  (grade_2, yes, negative) 0.8074575759, 0.1925424241;
+  (grade_3, no, positive) 0.1040041814, 0.8959958186;
+  (grade_3, no, negative) 0.9928982606, 0.007101739363;
+  (grade_3, yes, positive) 0.9481706491, 0.05182935089;
+  (grade_3, yes, negative) 0.2876517624, 0.7123482376;
+}
+probability ( MyometrialInvasion ) {
+  table 0.4582768761, 0.2405593174, 0.3011638065;
+}
+probability ( ER | Histology, LNM ) {
+  (grade_1, no) 0.969843152, 0.03015684797;
+  (grade_1, yes) 0.95102982, 0.04897018003;
+  (grade_2, no) 0.9398866282, 0.06011337177;
+  (grade_2, yes) 0.8230078249, 0.1769921751;
+  (grade_3, no) 0.5413769337, 0.4586230663;
+  (grade_3, yes) 0.8640754312, 0.1359245688;
+}
+probability ( Recurrence | CA125, Histology, LNM, LVSI ) {
+  (lt_35, grade_1, no, no) 0.97891019, 0.02108980296, 7.030299729e-09;
+  (lt_35, grade_1, no, yes) 0.9999997891, 1.054629751e-07, 1.054629751e-07;
+  (lt_35, grade_1, yes, no) 0.9999940606, 5.901985949e-06, 3.737121894e-08;
+  (lt_35, grade_1, yes, yes) 0.9999992057, 3.971397469e-07, 3.971397469e-07;
+  (lt_35, grade_2, no, no) 0.8020456074, 0.1969120746, 0.001042318002;
+  (lt_35, grade_2, no, yes) 0.6419918412, 0.3580080374, 1.214093645e-07;
+  (lt_35, grade_2, yes, no) 0.9334010653, 0.01835978101, 0.04823915365;
+  (lt_35, grade_2, yes, yes) 0.9911102797, 0.008889546816, 1.7350842e-07;
+  (lt_35, grade_3, no, no) 0.754565254, 0.2454346804, 6.562773794e-08;
+  (lt_35, grade_3, no, yes) 0.04889447765, 0.9511054287, 9.362666992e-08;
+  (lt_35, grade_3, yes, no) 0.9446370381, 0.05536291797, 4.393181583e-08;
+  (lt_35, grade_3, yes, yes) 0.6976330321, 0.3023669161, 5.176174026e-08;
+  (ge_35, grade_1, no, no) 0.9999998985, 5.073480733e-08, 5.073480733e-08;
+  (ge_35, grade_1, no, yes) 0.03513961293, 0.9648600655, 3.216199146e-07;
+  (ge_35, grade_1, yes, no) 0.9999996219, 1.8904764e-07, 1.8904764e-07;
+  (ge_35, grade_1, yes, yes) 0.9999977546, 1.122707275e-06, 1.122654746e-06;
+  (ge_35, grade_2, no, no) 0.2466784031, 0.7523741201, 0.0009474767956;
+  (ge_35, grade_2, no, yes) 0.0001737924913, 3.422087408e-07, 0.9998258653;
+  (ge_35, grade_2, yes, no) 0.9250924483, 0.0005508513613, 0.07435670032;
+  (ge_35, grade_2, yes, yes) 0.9807939164, 2.452294917e-07, 0.01920583841;
+  (ge_35, grade_3, no, no) 9.019994127e-06, 1.743525948e-06, 0.9999892365;
+  (ge_35, grade_3, no, yes) 0.5888493283, 0.4111505445, 1.272151276e-07;
+  (ge_35, grade_3, yes, no) 0.3749993901, 0.625000478, 1.31897105e-07;
+  (ge_35, grade_3, yes, yes) 0.3688719914, 0.6311278992, 1.094175028e-07;
+}
+probability ( Cytology ) {
+  table 0.9679999981, 0.03200000187;
+}
+probability ( Survival5yr | Recurrence, Therapy ) {
+  (no, no) 0.9959183633, 0.004081636701;
+  (no, radiotx) 0.9999999937, 6.289308097e-09;
+  (no, chemotx) 0.9999999091, 9.090907438e-08;
+  (no, chemoradiotx) 0.9999999091, 9.090907438e-08;
+  (regional_distant, no) 0.5416666632, 0.4583333368;
+  (regional_distant, radiotx) 0.5416666632, 0.4583333368;
+  (regional_distant, chemotx) 0.10000008, 0.89999992;
+  (regional_distant, chemoradiotx) 0.571428551, 0.428571449;
+  (local, no) 0.5, 0.5;
+  (local, radiotx) 0.5, 0.5;
+  (local, chemotx) 0.5, 0.5;
+  (local, chemoradiotx) 9.99998e-07, 0.999999;
+}
+probability ( CTMRI | CA125, LNM ) {
+  (lt_35, no) 0.9884501196, 0.01154988036;
+  (lt_35, yes) 0.9999859095, 1.409045493e-05;
+  (ge_35, no) 0.9130078338, 0.08699216622;
+  (ge_35, yes) 0.6954837859, 0.3045162141;
+}

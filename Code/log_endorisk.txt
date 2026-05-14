@@ -1,0 +1,620 @@
+=== Assignment Detailed Results ===
+EM mode=final (restarts=5, max_iter=10)
+VE heuristic=min_fill
+
+=== Part 1 (VE) ===
+Part 1 (VE): query=Alarm, evidence={'Burglary': 'True'}, distribution=[{'Alarm': 'False', 'prob': 0.05980000000000001}, {'Alarm': 'True', 'prob': 0.9402}], heuristic=min_fill
+
+=== BONUS: Part 1 checks ===
+Non-binary check: query=Histology states=3 distribution_rows=3
+Heuristic=min_fill elapsed=0.0118s P(Alarm=True|{'Burglary': 'True'})=0.940200 order=['MaryCalls', 'JohnCalls', 'Burglary', 'Earthquake']
+Heuristic=least_degree elapsed=0.0112s P(Alarm=True|{'Burglary': 'True'})=0.940200 order=['MaryCalls', 'JohnCalls', 'Burglary', 'Earthquake']
+Heuristic=fewest_factors elapsed=0.0118s P(Alarm=True|{'Burglary': 'True'})=0.940200 order=['MaryCalls', 'JohnCalls', 'Burglary', 'Earthquake']
+
+=== Part 2 (MAP) ===
+MAP Query: ['Burglary', 'Earthquake']
+Evidence: {'Alarm': 'True'}
+Elimination Order: ['MaryCalls', 'JohnCalls']
+
+Eliminating variable: MaryCalls
+  - Factors in bucket for MaryCalls:
+  MaryCalls  prob
+0      True   0.7
+1     False   0.3
+  - Product of factors for MaryCalls:
+  MaryCalls  prob
+0      True   0.7
+1     False   0.3
+  - Summing out MaryCalls:
+    - New factor:
+   prob
+0   1.0
+
+Eliminating variable: JohnCalls
+  - Factors in bucket for JohnCalls:
+  JohnCalls  prob
+0      True   0.9
+1     False   0.1
+  - Product of factors for JohnCalls:
+  JohnCalls  prob
+0      True   0.9
+1     False   0.1
+  - Summing out JohnCalls:
+    - New factor:
+   prob
+0   1.0
+
+Eliminating variable: Burglary
+  - Factors in bucket for Burglary:
+  Burglary  prob
+0     True  0.01
+1    False  0.99
+  Burglary Earthquake   prob
+0     True       True  0.950
+2    False       True  0.290
+4     True      False  0.940
+6    False      False  0.001
+  - Product of factors for Burglary:
+  Burglary Earthquake     prob
+0     True       True  0.00950
+1     True      False  0.00940
+2    False       True  0.28710
+3    False      False  0.00099
+  - Maximizing out Burglary:
+    - New factor:
+  Earthquake    prob
+0       True  0.2871
+1      False  0.0094
+    - Assignment:
+  Earthquake Burglary
+0       True    False
+1      False     True
+
+Eliminating variable: Earthquake
+  - Factors in bucket for Earthquake:
+  Earthquake  prob
+0       True  0.02
+1      False  0.98
+  Earthquake    prob
+0       True  0.2871
+1      False  0.0094
+  - Product of factors for Earthquake:
+  Earthquake      prob
+0       True  0.005742
+1      False  0.009212
+  - Maximizing out Earthquake:
+    - New factor:
+       prob
+0  0.009212
+    - Assignment:
+  Earthquake
+0      False
+
+Backtracing to find MPE...
+  - For Earthquake, found assignment False
+  - For Burglary, found assignment True
+
+Final MPE: {'Earthquake': 'False', 'Burglary': 'True'}
+Probability: 0.009212
+
+=== Part 3 (EM) ===
+BIF: endorisk_new.bif
+Data: simulation_data_hid_names.dat rows=500
+Restarts=5 max_iter=10
+
+=== Restart 1/5 (seed=1337) ===
+Hidden: ['LNM', 'MyometrialInvasion']
+Involved: ['CA125', 'CTMRI', 'ER', 'Histology', 'L1CAM', 'LNM', 'MyometrialInvasion', 'PR', 'Platelets', 'Recurrence', 'p53']
+Fixed: ['Cytology', 'LVSI', 'PrimaryTumor', 'Survival1yr', 'Survival3yr', 'Survival5yr', 'Therapy']
+
+  E 25/218 (21.5/s, ETA 0.1m)
+  E 50/218 (22.2/s, ETA 0.1m)
+  E 75/218 (22.6/s, ETA 0.1m)
+  E 100/218 (22.5/s, ETA 0.1m)
+  E 125/218 (21.9/s, ETA 0.1m)
+  E 150/218 (22.1/s, ETA 0.1m)
+  E 175/218 (22.0/s, ETA 0.0m)
+  E 200/218 (21.4/s, ETA 0.0m)
+Iter 001: LL=-5569.5886 |Δθ|=0.98
+  E 25/218 (15.2/s, ETA 0.2m)
+  E 50/218 (16.6/s, ETA 0.2m)
+  E 75/218 (16.3/s, ETA 0.1m)
+  E 100/218 (16.6/s, ETA 0.1m)
+  E 125/218 (16.1/s, ETA 0.1m)
+  E 150/218 (15.9/s, ETA 0.1m)
+  E 175/218 (15.7/s, ETA 0.0m)
+  E 200/218 (15.6/s, ETA 0.0m)
+Iter 002: LL=-2763.1956 Δ=2806.3930 |Δθ|=0.99
+  E 25/218 (15.6/s, ETA 0.2m)
+  E 50/218 (15.3/s, ETA 0.2m)
+  E 75/218 (15.3/s, ETA 0.2m)
+  E 100/218 (15.4/s, ETA 0.1m)
+  E 125/218 (15.3/s, ETA 0.1m)
+  E 150/218 (15.3/s, ETA 0.1m)
+  E 175/218 (15.3/s, ETA 0.0m)
+  E 200/218 (15.3/s, ETA 0.0m)
+Iter 003: LL=-2752.1580 Δ=11.0376 |Δθ|=0.99
+  E 25/218 (16.8/s, ETA 0.2m)
+  E 50/218 (16.9/s, ETA 0.2m)
+  E 75/218 (17.3/s, ETA 0.1m)
+  E 100/218 (17.2/s, ETA 0.1m)
+  E 125/218 (16.7/s, ETA 0.1m)
+  E 150/218 (16.7/s, ETA 0.1m)
+  E 175/218 (16.7/s, ETA 0.0m)
+  E 200/218 (16.7/s, ETA 0.0m)
+Iter 004: LL=-2748.2126 Δ=3.9454 |Δθ|=0.99
+  E 25/218 (18.3/s, ETA 0.2m)
+  E 50/218 (18.3/s, ETA 0.2m)
+  E 75/218 (17.4/s, ETA 0.1m)
+  E 100/218 (17.3/s, ETA 0.1m)
+  E 125/218 (17.0/s, ETA 0.1m)
+  E 150/218 (16.8/s, ETA 0.1m)
+  E 175/218 (16.8/s, ETA 0.0m)
+  E 200/218 (16.6/s, ETA 0.0m)
+Iter 005: LL=-2745.2029 Δ=3.0098 |Δθ|=0.99
+  E 25/218 (16.8/s, ETA 0.2m)
+  E 50/218 (16.9/s, ETA 0.2m)
+  E 75/218 (17.2/s, ETA 0.1m)
+  E 100/218 (17.1/s, ETA 0.1m)
+  E 125/218 (17.0/s, ETA 0.1m)
+  E 150/218 (16.8/s, ETA 0.1m)
+  E 175/218 (16.6/s, ETA 0.0m)
+  E 200/218 (16.7/s, ETA 0.0m)
+Iter 006: LL=-2742.5993 Δ=2.6036 |Δθ|=0.99
+  E 25/218 (17.7/s, ETA 0.2m)
+  E 50/218 (17.5/s, ETA 0.2m)
+  E 75/218 (17.5/s, ETA 0.1m)
+  E 100/218 (17.2/s, ETA 0.1m)
+  E 125/218 (17.0/s, ETA 0.1m)
+  E 150/218 (17.0/s, ETA 0.1m)
+  E 175/218 (17.1/s, ETA 0.0m)
+  E 200/218 (17.1/s, ETA 0.0m)
+Iter 007: LL=-2740.3057 Δ=2.2936 |Δθ|=0.99
+  E 25/218 (17.1/s, ETA 0.2m)
+  E 50/218 (16.5/s, ETA 0.2m)
+  E 75/218 (16.7/s, ETA 0.1m)
+  E 100/218 (16.8/s, ETA 0.1m)
+  E 125/218 (16.5/s, ETA 0.1m)
+  E 150/218 (16.4/s, ETA 0.1m)
+  E 175/218 (16.2/s, ETA 0.0m)
+  E 200/218 (16.2/s, ETA 0.0m)
+Iter 008: LL=-2738.2473 Δ=2.0584 |Δθ|=0.99
+  E 25/218 (16.4/s, ETA 0.2m)
+  E 50/218 (16.8/s, ETA 0.2m)
+  E 75/218 (16.8/s, ETA 0.1m)
+  E 100/218 (16.7/s, ETA 0.1m)
+  E 125/218 (16.8/s, ETA 0.1m)
+  E 150/218 (16.8/s, ETA 0.1m)
+  E 175/218 (16.9/s, ETA 0.0m)
+  E 200/218 (17.0/s, ETA 0.0m)
+Iter 009: LL=-2736.4259 Δ=1.8213 |Δθ|=0.99
+  E 25/218 (17.1/s, ETA 0.2m)
+  E 50/218 (16.7/s, ETA 0.2m)
+  E 75/218 (16.6/s, ETA 0.1m)
+  E 100/218 (17.0/s, ETA 0.1m)
+  E 125/218 (17.0/s, ETA 0.1m)
+  E 150/218 (17.2/s, ETA 0.1m)
+  E 175/218 (17.1/s, ETA 0.0m)
+  E 200/218 (16.9/s, ETA 0.0m)
+Iter 010: LL=-2734.8361 Δ=1.5899 |Δθ|=0.99
+Stopped: max_iter
+Done: iters=10 LL=-2734.8361
+
+=== Restart 2/5 (seed=1354) ===
+Hidden: ['LNM', 'MyometrialInvasion']
+Involved: ['CA125', 'CTMRI', 'ER', 'Histology', 'L1CAM', 'LNM', 'MyometrialInvasion', 'PR', 'Platelets', 'Recurrence', 'p53']
+Fixed: ['Cytology', 'LVSI', 'PrimaryTumor', 'Survival1yr', 'Survival3yr', 'Survival5yr', 'Therapy']
+
+  E 25/218 (17.1/s, ETA 0.2m)
+  E 50/218 (17.4/s, ETA 0.2m)
+  E 75/218 (17.1/s, ETA 0.1m)
+  E 100/218 (16.9/s, ETA 0.1m)
+  E 125/218 (16.9/s, ETA 0.1m)
+  E 150/218 (17.1/s, ETA 0.1m)
+  E 175/218 (17.0/s, ETA 0.0m)
+  E 200/218 (17.0/s, ETA 0.0m)
+Iter 001: LL=-5468.1781 |Δθ|=0.95
+  E 25/218 (17.3/s, ETA 0.2m)
+  E 50/218 (16.5/s, ETA 0.2m)
+  E 75/218 (16.5/s, ETA 0.1m)
+  E 100/218 (16.6/s, ETA 0.1m)
+  E 125/218 (16.7/s, ETA 0.1m)
+  E 150/218 (16.7/s, ETA 0.1m)
+  E 175/218 (16.7/s, ETA 0.0m)
+  E 200/218 (16.8/s, ETA 0.0m)
+Iter 002: LL=-2752.2492 Δ=2715.9289 |Δθ|=0.97
+  E 25/218 (18.0/s, ETA 0.2m)
+  E 50/218 (17.7/s, ETA 0.2m)
+  E 75/218 (17.9/s, ETA 0.1m)
+  E 100/218 (18.0/s, ETA 0.1m)
+  E 125/218 (17.9/s, ETA 0.1m)
+  E 150/218 (18.0/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (18.0/s, ETA 0.0m)
+Iter 003: LL=-2740.9107 Δ=11.3384 |Δθ|=0.97
+  E 25/218 (17.9/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.8/s, ETA 0.1m)
+  E 150/218 (17.6/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 004: LL=-2735.8697 Δ=5.0411 |Δθ|=0.98
+  E 25/218 (18.5/s, ETA 0.2m)
+  E 50/218 (17.9/s, ETA 0.2m)
+  E 75/218 (17.9/s, ETA 0.1m)
+  E 100/218 (17.7/s, ETA 0.1m)
+  E 125/218 (17.5/s, ETA 0.1m)
+  E 150/218 (17.4/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 005: LL=-2732.6762 Δ=3.1935 |Δθ|=0.98
+  E 25/218 (17.5/s, ETA 0.2m)
+  E 50/218 (18.1/s, ETA 0.2m)
+  E 75/218 (17.4/s, ETA 0.1m)
+  E 100/218 (17.7/s, ETA 0.1m)
+  E 125/218 (17.8/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.8/s, ETA 0.0m)
+  E 200/218 (17.9/s, ETA 0.0m)
+Iter 006: LL=-2730.1733 Δ=2.5029 |Δθ|=0.99
+  E 25/218 (17.6/s, ETA 0.2m)
+  E 50/218 (18.1/s, ETA 0.2m)
+  E 75/218 (17.9/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.5/s, ETA 0.1m)
+  E 150/218 (17.5/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 007: LL=-2727.7910 Δ=2.3823 |Δθ|=0.99
+  E 25/218 (16.8/s, ETA 0.2m)
+  E 50/218 (17.7/s, ETA 0.2m)
+  E 75/218 (17.9/s, ETA 0.1m)
+  E 100/218 (17.8/s, ETA 0.1m)
+  E 125/218 (17.8/s, ETA 0.1m)
+  E 150/218 (17.8/s, ETA 0.1m)
+  E 175/218 (17.8/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 008: LL=-2725.6735 Δ=2.1175 |Δθ|=0.99
+  E 25/218 (17.4/s, ETA 0.2m)
+  E 50/218 (17.9/s, ETA 0.2m)
+  E 75/218 (17.7/s, ETA 0.1m)
+  E 100/218 (17.9/s, ETA 0.1m)
+  E 125/218 (17.9/s, ETA 0.1m)
+  E 150/218 (17.3/s, ETA 0.1m)
+  E 175/218 (17.2/s, ETA 0.0m)
+  E 200/218 (17.2/s, ETA 0.0m)
+Iter 009: LL=-2723.9688 Δ=1.7047 |Δθ|=0.99
+  E 25/218 (17.1/s, ETA 0.2m)
+  E 50/218 (17.2/s, ETA 0.2m)
+  E 75/218 (16.8/s, ETA 0.1m)
+  E 100/218 (16.7/s, ETA 0.1m)
+  E 125/218 (16.7/s, ETA 0.1m)
+  E 150/218 (16.8/s, ETA 0.1m)
+  E 175/218 (16.9/s, ETA 0.0m)
+  E 200/218 (16.7/s, ETA 0.0m)
+Iter 010: LL=-2722.5193 Δ=1.4495 |Δθ|=0.99
+Stopped: max_iter
+Done: iters=10 LL=-2722.5193
+
+=== Restart 3/5 (seed=1371) ===
+Hidden: ['LNM', 'MyometrialInvasion']
+Involved: ['CA125', 'CTMRI', 'ER', 'Histology', 'L1CAM', 'LNM', 'MyometrialInvasion', 'PR', 'Platelets', 'Recurrence', 'p53']
+Fixed: ['Cytology', 'LVSI', 'PrimaryTumor', 'Survival1yr', 'Survival3yr', 'Survival5yr', 'Therapy']
+
+  E 25/218 (14.3/s, ETA 0.2m)
+  E 50/218 (15.5/s, ETA 0.2m)
+  E 75/218 (15.5/s, ETA 0.2m)
+  E 100/218 (15.7/s, ETA 0.1m)
+  E 125/218 (15.6/s, ETA 0.1m)
+  E 150/218 (15.8/s, ETA 0.1m)
+  E 175/218 (15.9/s, ETA 0.0m)
+  E 200/218 (16.0/s, ETA 0.0m)
+Iter 001: LL=-5173.5916 |Δθ|=1
+  E 25/218 (17.1/s, ETA 0.2m)
+  E 50/218 (17.3/s, ETA 0.2m)
+  E 75/218 (17.3/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.6/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 002: LL=-2758.1275 Δ=2415.4642 |Δθ|=1
+  E 25/218 (18.1/s, ETA 0.2m)
+  E 50/218 (18.5/s, ETA 0.2m)
+  E 75/218 (18.2/s, ETA 0.1m)
+  E 100/218 (18.0/s, ETA 0.1m)
+  E 125/218 (18.0/s, ETA 0.1m)
+  E 150/218 (18.0/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (17.8/s, ETA 0.0m)
+Iter 003: LL=-2751.1093 Δ=7.0182 |Δθ|=1
+  E 25/218 (17.6/s, ETA 0.2m)
+  E 50/218 (17.3/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.8/s, ETA 0.1m)
+  E 150/218 (17.8/s, ETA 0.1m)
+  E 175/218 (17.7/s, ETA 0.0m)
+  E 200/218 (17.7/s, ETA 0.0m)
+Iter 004: LL=-2745.6917 Δ=5.4176 |Δθ|=1
+  E 25/218 (18.2/s, ETA 0.2m)
+  E 50/218 (18.3/s, ETA 0.2m)
+  E 75/218 (18.2/s, ETA 0.1m)
+  E 100/218 (18.3/s, ETA 0.1m)
+  E 125/218 (18.2/s, ETA 0.1m)
+  E 150/218 (18.0/s, ETA 0.1m)
+  E 175/218 (18.0/s, ETA 0.0m)
+  E 200/218 (17.8/s, ETA 0.0m)
+Iter 005: LL=-2740.3247 Δ=5.3670 |Δθ|=1
+  E 25/218 (18.0/s, ETA 0.2m)
+  E 50/218 (17.9/s, ETA 0.2m)
+  E 75/218 (18.1/s, ETA 0.1m)
+  E 100/218 (17.9/s, ETA 0.1m)
+  E 125/218 (17.6/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.8/s, ETA 0.0m)
+  E 200/218 (17.8/s, ETA 0.0m)
+Iter 006: LL=-2735.5843 Δ=4.7404 |Δθ|=1
+  E 25/218 (17.8/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.9/s, ETA 0.1m)
+  E 125/218 (17.9/s, ETA 0.1m)
+  E 150/218 (18.0/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (17.8/s, ETA 0.0m)
+Iter 007: LL=-2731.4238 Δ=4.1605 |Δθ|=1
+  E 25/218 (18.3/s, ETA 0.2m)
+  E 50/218 (18.6/s, ETA 0.2m)
+  E 75/218 (18.1/s, ETA 0.1m)
+  E 100/218 (18.0/s, ETA 0.1m)
+  E 125/218 (18.0/s, ETA 0.1m)
+  E 150/218 (18.0/s, ETA 0.1m)
+  E 175/218 (18.0/s, ETA 0.0m)
+  E 200/218 (17.7/s, ETA 0.0m)
+Iter 008: LL=-2727.6702 Δ=3.7536 |Δθ|=1
+  E 25/218 (18.1/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.5/s, ETA 0.1m)
+  E 100/218 (17.4/s, ETA 0.1m)
+  E 125/218 (17.6/s, ETA 0.1m)
+  E 150/218 (17.6/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 009: LL=-2724.7234 Δ=2.9468 |Δθ|=1
+  E 25/218 (17.9/s, ETA 0.2m)
+  E 50/218 (17.5/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.6/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.4/s, ETA 0.0m)
+Iter 010: LL=-2722.2073 Δ=2.5161 |Δθ|=1
+Stopped: max_iter
+Done: iters=10 LL=-2722.2073
+
+=== Restart 4/5 (seed=1388) ===
+Hidden: ['LNM', 'MyometrialInvasion']
+Involved: ['CA125', 'CTMRI', 'ER', 'Histology', 'L1CAM', 'LNM', 'MyometrialInvasion', 'PR', 'Platelets', 'Recurrence', 'p53']
+Fixed: ['Cytology', 'LVSI', 'PrimaryTumor', 'Survival1yr', 'Survival3yr', 'Survival5yr', 'Therapy']
+
+  E 25/218 (17.4/s, ETA 0.2m)
+  E 50/218 (17.3/s, ETA 0.2m)
+  E 75/218 (17.5/s, ETA 0.1m)
+  E 100/218 (17.7/s, ETA 0.1m)
+  E 125/218 (17.6/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.7/s, ETA 0.0m)
+  E 200/218 (17.7/s, ETA 0.0m)
+Iter 001: LL=-5517.8544 |Δθ|=0.88
+  E 25/218 (17.4/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.7/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.8/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (17.9/s, ETA 0.0m)
+Iter 002: LL=-2765.1702 Δ=2752.6842 |Δθ|=0.88
+  E 25/218 (17.5/s, ETA 0.2m)
+  E 50/218 (17.5/s, ETA 0.2m)
+  E 75/218 (17.4/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.6/s, ETA 0.1m)
+  E 150/218 (17.9/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (17.9/s, ETA 0.0m)
+Iter 003: LL=-2751.1615 Δ=14.0087 |Δθ|=0.88
+  E 25/218 (18.2/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.5/s, ETA 0.1m)
+  E 150/218 (17.4/s, ETA 0.1m)
+  E 175/218 (17.3/s, ETA 0.0m)
+  E 200/218 (17.3/s, ETA 0.0m)
+Iter 004: LL=-2743.8235 Δ=7.3380 |Δθ|=0.88
+  E 25/218 (17.4/s, ETA 0.2m)
+  E 50/218 (18.2/s, ETA 0.2m)
+  E 75/218 (18.2/s, ETA 0.1m)
+  E 100/218 (18.1/s, ETA 0.1m)
+  E 125/218 (18.2/s, ETA 0.1m)
+  E 150/218 (18.2/s, ETA 0.1m)
+  E 175/218 (18.0/s, ETA 0.0m)
+  E 200/218 (17.9/s, ETA 0.0m)
+Iter 005: LL=-2738.4366 Δ=5.3868 |Δθ|=0.89
+  E 25/218 (17.3/s, ETA 0.2m)
+  E 50/218 (17.9/s, ETA 0.2m)
+  E 75/218 (17.8/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.8/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.5/s, ETA 0.0m)
+Iter 006: LL=-2734.5427 Δ=3.8940 |Δθ|=0.91
+  E 25/218 (17.3/s, ETA 0.2m)
+  E 50/218 (17.3/s, ETA 0.2m)
+  E 75/218 (17.1/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.4/s, ETA 0.1m)
+  E 150/218 (17.5/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 007: LL=-2731.6302 Δ=2.9125 |Δθ|=0.92
+  E 25/218 (17.9/s, ETA 0.2m)
+  E 50/218 (18.3/s, ETA 0.2m)
+  E 75/218 (18.1/s, ETA 0.1m)
+  E 100/218 (18.0/s, ETA 0.1m)
+  E 125/218 (17.9/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.7/s, ETA 0.0m)
+  E 200/218 (17.7/s, ETA 0.0m)
+Iter 008: LL=-2729.2337 Δ=2.3965 |Δθ|=0.92
+  E 25/218 (17.3/s, ETA 0.2m)
+  E 50/218 (17.6/s, ETA 0.2m)
+  E 75/218 (17.7/s, ETA 0.1m)
+  E 100/218 (17.5/s, ETA 0.1m)
+  E 125/218 (17.5/s, ETA 0.1m)
+  E 150/218 (17.4/s, ETA 0.1m)
+  E 175/218 (17.4/s, ETA 0.0m)
+  E 200/218 (17.5/s, ETA 0.0m)
+Iter 009: LL=-2727.0270 Δ=2.2067 |Δθ|=0.94
+  E 25/218 (18.9/s, ETA 0.2m)
+  E 50/218 (17.9/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.2/s, ETA 0.1m)
+  E 125/218 (17.2/s, ETA 0.1m)
+  E 150/218 (17.2/s, ETA 0.1m)
+  E 175/218 (17.2/s, ETA 0.0m)
+  E 200/218 (17.2/s, ETA 0.0m)
+Iter 010: LL=-2724.9979 Δ=2.0291 |Δθ|=0.96
+Stopped: max_iter
+Done: iters=10 LL=-2724.9979
+
+=== Restart 5/5 (seed=1405) ===
+Hidden: ['LNM', 'MyometrialInvasion']
+Involved: ['CA125', 'CTMRI', 'ER', 'Histology', 'L1CAM', 'LNM', 'MyometrialInvasion', 'PR', 'Platelets', 'Recurrence', 'p53']
+Fixed: ['Cytology', 'LVSI', 'PrimaryTumor', 'Survival1yr', 'Survival3yr', 'Survival5yr', 'Therapy']
+
+  E 25/218 (18.1/s, ETA 0.2m)
+  E 50/218 (18.0/s, ETA 0.2m)
+  E 75/218 (17.8/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.6/s, ETA 0.1m)
+  E 175/218 (17.6/s, ETA 0.0m)
+  E 200/218 (17.5/s, ETA 0.0m)
+Iter 001: LL=-5432.1323 |Δθ|=0.92
+  E 25/218 (17.6/s, ETA 0.2m)
+  E 50/218 (17.4/s, ETA 0.2m)
+  E 75/218 (17.4/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.4/s, ETA 0.1m)
+  E 150/218 (17.4/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.5/s, ETA 0.0m)
+Iter 002: LL=-2758.2023 Δ=2673.9300 |Δθ|=0.92
+  E 25/218 (17.5/s, ETA 0.2m)
+  E 50/218 (18.0/s, ETA 0.2m)
+  E 75/218 (17.9/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.4/s, ETA 0.1m)
+  E 150/218 (17.3/s, ETA 0.1m)
+  E 175/218 (17.3/s, ETA 0.0m)
+  E 200/218 (17.3/s, ETA 0.0m)
+Iter 003: LL=-2750.6471 Δ=7.5552 |Δθ|=0.93
+  E 25/218 (17.6/s, ETA 0.2m)
+  E 50/218 (18.1/s, ETA 0.2m)
+  E 75/218 (18.2/s, ETA 0.1m)
+  E 100/218 (18.0/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.7/s, ETA 0.1m)
+  E 175/218 (17.7/s, ETA 0.0m)
+  E 200/218 (17.7/s, ETA 0.0m)
+Iter 004: LL=-2746.8241 Δ=3.8230 |Δθ|=0.93
+  E 25/218 (17.7/s, ETA 0.2m)
+  E 50/218 (17.3/s, ETA 0.2m)
+  E 75/218 (17.0/s, ETA 0.1m)
+  E 100/218 (17.3/s, ETA 0.1m)
+  E 125/218 (17.3/s, ETA 0.1m)
+  E 150/218 (17.3/s, ETA 0.1m)
+  E 175/218 (17.1/s, ETA 0.0m)
+  E 200/218 (17.0/s, ETA 0.0m)
+Iter 005: LL=-2743.7040 Δ=3.1201 |Δθ|=0.93
+  E 25/218 (15.7/s, ETA 0.2m)
+  E 50/218 (16.3/s, ETA 0.2m)
+  E 75/218 (16.8/s, ETA 0.1m)
+  E 100/218 (16.9/s, ETA 0.1m)
+  E 125/218 (17.0/s, ETA 0.1m)
+  E 150/218 (17.0/s, ETA 0.1m)
+  E 175/218 (17.2/s, ETA 0.0m)
+  E 200/218 (17.3/s, ETA 0.0m)
+Iter 006: LL=-2741.0294 Δ=2.6746 |Δθ|=0.93
+  E 25/218 (17.3/s, ETA 0.2m)
+  E 50/218 (17.7/s, ETA 0.2m)
+  E 75/218 (17.2/s, ETA 0.1m)
+  E 100/218 (17.3/s, ETA 0.1m)
+  E 125/218 (17.5/s, ETA 0.1m)
+  E 150/218 (17.6/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.4/s, ETA 0.0m)
+Iter 007: LL=-2738.7399 Δ=2.2896 |Δθ|=0.93
+  E 25/218 (18.1/s, ETA 0.2m)
+  E 50/218 (18.2/s, ETA 0.2m)
+  E 75/218 (18.1/s, ETA 0.1m)
+  E 100/218 (18.1/s, ETA 0.1m)
+  E 125/218 (17.9/s, ETA 0.1m)
+  E 150/218 (17.9/s, ETA 0.1m)
+  E 175/218 (17.9/s, ETA 0.0m)
+  E 200/218 (17.9/s, ETA 0.0m)
+Iter 008: LL=-2736.7545 Δ=1.9854 |Δθ|=0.93
+  E 25/218 (17.7/s, ETA 0.2m)
+  E 50/218 (18.2/s, ETA 0.2m)
+  E 75/218 (17.6/s, ETA 0.1m)
+  E 100/218 (17.6/s, ETA 0.1m)
+  E 125/218 (17.7/s, ETA 0.1m)
+  E 150/218 (17.5/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.6/s, ETA 0.0m)
+Iter 009: LL=-2735.0565 Δ=1.6980 |Δθ|=0.94
+  E 25/218 (17.8/s, ETA 0.2m)
+  E 50/218 (17.7/s, ETA 0.2m)
+  E 75/218 (17.2/s, ETA 0.1m)
+  E 100/218 (17.4/s, ETA 0.1m)
+  E 125/218 (17.3/s, ETA 0.1m)
+  E 150/218 (17.5/s, ETA 0.1m)
+  E 175/218 (17.5/s, ETA 0.0m)
+  E 200/218 (17.5/s, ETA 0.0m)
+Iter 010: LL=-2733.6320 Δ=1.4245 |Δθ|=0.94
+Stopped: max_iter
+Done: iters=10 LL=-2733.6320
+
+
+=== Best: seed=1371 iters=10 LL=-2722.2073 ===
+PR: mean=0.1702 max=0.4963
+Platelets: mean=0.006695 max=0.01122
+Survival1yr: mean=0.1664 max=0.6
+LVSI: mean=0.1178 max=0.5
+LNM: mean=0.3585 max=1
+CA125: mean=0.2661 max=0.516
+Histology: mean=0.2067 max=0.8367
+p53: mean=0.1894 max=0.5
+PrimaryTumor: mean=0.03293 max=0.0494
+Therapy: mean=0.01104 max=0.02603
+Survival3yr: mean=0.1724 max=0.7
+L1CAM: mean=0.2304 max=0.7445
+MyometrialInvasion: mean=0.2548 max=0.3823
+ER: mean=0.09584 max=0.2045
+Recurrence: mean=0.2314 max=1
+Cytology: mean=0.004697 max=0.004697
+Survival5yr: mean=0.08109 max=0.6
+CTMRI: mean=0.07817 max=0.1273
+Saved: learned_endorisk.bif
+
+=== Summary ===
+Part 1 (VE): query=Alarm, evidence={'Burglary': 'True'}, distribution=[{'Alarm': 'False', 'prob': 0.05980000000000001}, {'Alarm': 'True', 'prob': 0.9402}], heuristic=min_fill
+Part 2 (MAP): query_vars=['Burglary', 'Earthquake'], evidence={'Alarm': 'True'}, mpe={'Earthquake': 'False', 'Burglary': 'True'}, probability=0.009212
+Part 3 EM done: restarts=5 max_iter=10 data=simulation_data_hid_names.dat

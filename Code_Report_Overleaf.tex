@@ -1,0 +1,233 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\setstretch{1.2}
+\setlist[itemize]{leftmargin=1.6em}
+\setlist[enumerate]{leftmargin=1.8em}
+
+\title{\textbf{Bayesian Networks Code Report}}
+\author{Simon Stronks S1137749}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+In this report, I will explain the implementation and the evaluation of a Bayesian Network system. I wrote this as 1 complete, integrated report covering Variable Elimination (VE), MAP inference, and Expectation-Maximization (EM). In this report, I will discuss algorithmic complexity and heuristic choices. I also mentioned how I used the formative feedback to improve the code. There are 3 parts:
+
+\begin{itemize}
+    \item \textbf{Part 1: Variable Elimination (VE)}
+    \item \textbf{Part 2: MAP inference (MAP)}
+    \item \textbf{Part 3: Expectation-Maximization (EM)}
+\end{itemize}
+
+I will run my code from \texttt{run.py}. Logs with the results are written to \texttt{log\_endorisk.txt}, and I made some modifications to be able to parse both old BIF style and XML-BIF style parsing.
+
+I did this so that it is possible to use both \texttt{endorisk\_new.bif} and \texttt{endomcancer.bif}. Maybe this was not necessary but I felt that it was.
+I also compared the learned Endorisk model with the original one using a separate comparison script, so we can see the actual parameter changes.
+
+\section{The Background: Project Setup}
+The project is structured so that all main outputs can be generated from one run command. This made it much easier for me to compare results after each heuristic change.
+\subsection{Project setup}
+\begin{itemize}
+    \item Run file: \texttt{run.py}
+    \item Output log file: \texttt{log\_endorisk.txt}
+    \item Part 1 and Part 2 use the \texttt{earthquake.bif} network
+    \item Part 3 network: selected in \texttt{run.py}: \texttt{endorisk\_new.bif}
+    \item Part 3 data: \texttt{simulation\_data\_hid\_names.dat}
+\end{itemize}
+
+\subsection{Visualisation network files}
+I wanted to visualize the .bif files better, so with the help of Graphviz I generated visual depictions of the networks.
+
+
+
+\begin{figure}[htbp]
+\centering
+
+\begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{earthquake.png}
+    \caption{Earthquake network}
+\end{subfigure}\hfill
+\begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{endorisk_new.png}
+    \caption{Endorisk Network}
+\end{subfigure}\hfill
+\begin{subfigure}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{endomcancer.png}
+    \caption{Endomcancer Network}
+\end{subfigure}
+
+\vspace{0.8em}
+\caption{Visual depictions of the Bayesian networks.} % Optional: Adds a main caption for all 3
+\label{fig:networks}
+\end{figure}
+\newpage
+\subsection{Note on File Formats}
+It was a real struggle that some network files are in the old BIF format, while others, like Endorisk, are in XML-BIF format. To solve this, I added code to \texttt{read\_bayesnet.py} so it can parse both formats and choose the correct parsing path automatically.
+
+Also, I used data-column alignment in the preprocessing phase, in \texttt{expectation\_maximization.py} (line 62). I did this because the Endorisk dataset contains some naming differences from the node names in the network file. Making sure these matched beforehand ensured that the EM algorithm did not crash due to variable mismatch (which happened many times before).
+\section{Implementation}
+
+\subsection{Part 1: Variable Elimination}
+\subsubsection{Goal and Mathematical Formulation}
+The goal of Part 1 was to implement exact inference using Variable Elimination, so the query using the Earthquake network is:
+\[
+P(Alarm \mid Burglary=True) = \alpha \sum_{E, J, M} P(B, E, A, J, M)
+\]
+Then I did the following:
+\begin{enumerate}
+    \item Apply evidence by restricting factors (filtering DataFrame rows).
+    \item Multiply factors that share variables (using DataFrame inner merges).
+    \item Sum out non-query variables in a specific elimination order (using \texttt{groupby} and \texttt{sum}).
+    \item Normalize the final factor to get a valid distribution.
+\end{enumerate}
+
+\subsubsection{Complexity and Elimination Ordering}
+At first I hardcoded an elimination order, but then I implemented a \textbf{min-fill style heuristic} in the runner. A bad elimination order can explode intermediate factor sizes, changing the space complexity from very manageable to $\mathcal{O}(d^n)$. Min-fill: picks the variable whose elimination adds the fewest new connections between its neighbors. That usually keeps intermediate factors smaller.
+Least-degree: picks the variable with the fewest neighbors, so it tends to eliminate the least connected node first.
+Fewest-factors: picks the variable that appears in the fewest factors, so it targets the variable with the smallest immediate impact on the factor set.
+
+To select a specific heuristic, set the \texttt{VE\_HEURISTIC} environment variable to \texttt{min\_fill} (default), \texttt{least\_degree}, or \texttt{fewest\_factors} before running \texttt{run.py}.
+
+\subsection{Part 2: MAP Inference}
+\subsubsection{Goal}
+Part 2 cranks Variable Elimination up to MAP (Maximum a Posteriori) inference, so it is zeroing in on the single most likely assignment of key variables, given the evidence in hand. Here’s the current query setup:
+\begin{itemize}
+    \item MAP variables: \texttt{Burglary}, \texttt{Earthquake}
+    \item Evidence: \texttt{Alarm=True}
+\end{itemize}
+
+\subsubsection{Implementation Details}
+I reused most of the VE infrastructure but added MAP-specific behaviour. Instead of summing out variables, we maximise over them. The tricky part is that computing the max probability loses the actual assignment. To solve this, I added an argmax system. During elimination, I record which specific value yields the maximum probability, allowing me to reconstruct the final MAP assignment.
+
+\subsection{Part 3: Expectation-Maximization (EM) Learning}
+\subsubsection{Goal}
+In this part I have to implement EM on Endorisk-style data with hidden nodes, especially \textit{Lymph node metastasis (LNM)} and \textit{Myometrial invasion}. Because direct counting is impossible with missing data, EM iteratively guesses the missing values and updates the model with this newfound information.
+
+\subsubsection{Implementation Pipeline}
+I implemented EM with the following iterative steps
+\begin{itemize}
+    \item \textbf{Random Initialization:} Generating starting parameters using restart-dependent seeds.
+    \item \textbf{E-step:} Computing expected sufficient statistics via exact inference over the hidden variables for every row of data.
+    \item \textbf{M-step:} Updating CPT parameter tables with Laplace smoothing to prevent zero-probability crashes.
+    \item \textbf{Monitoring:} Tracking log-likelihood and parameter-change values per iteration.
+\end{itemize}
+
+\subsubsection{Comparison with the original Endorisk model}
+To make the difference between the original Endorisk model and the learned Endorisk model clear, I ran a comparison script between \texttt{endorisk\_new.bif} and \texttt{learned\_endorisk.bif}. The CPT differences were:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Node} & \textbf{Mean absolute difference} & \textbf{Max absolute difference} \\
+\midrule
+PR & 0.0927035 & 0.454083 \\
+Platelets & 0.00997109 & 0.0186789 \\
+Survival1yr & 0.166447 & 0.599999 \\
+LVSI & 0.117846 & 0.5 \\
+LNM & 0.402241 & 0.999997 \\
+CA125 & 0.247518 & 0.453449 \\
+Histology & 0.231838 & 0.968764 \\
+p53 & 0.275841 & 0.611091 \\
+PrimaryTumor & 0.0329314 & 0.0493971 \\
+Therapy & 0.0110369 & 0.0260328 \\
+Survival3yr & 0.172433 & 0.699999 \\
+L1CAM & 0.201999 & 0.499985 \\
+MyometrialInvasion & 0.171545 & 0.257318 \\
+ER & 0.05494 & 0.109975 \\
+Recurrence & 0.20618 & 0.999999 \\
+Cytology & 0.00469725 & 0.00469725 \\
+Survival5yr & 0.0810873 & 0.599999 \\
+CTMRI & 0.0892736 & 0.214286 \\
+\bottomrule
+\end{tabular}
+\caption{CPT differences vs original Endorisk model}
+\label{tab:cpt_differences_endorisk}
+\end{table}
+
+Overall, the overall maximum absolute difference was $0.999999$. So the learned model is clearly different from the original model, which is what I expected. (I did something right :) )
+
+\section{Results}
+As seen in the detailed execution logs and comparison output, the implemented algorithms produce the expected outputs for the test cases I checked.
+
+\subsection{Inference Benchmarks}
+\begin{itemize}
+    \item \textbf{Variable Elimination Validation:} The Variable Elimination engine correctly marginalizes over the Earthquake variable to calculate $P(Alarm=True \mid Burglary=True) = 0.9402$. It effectively hit the exact floating-point value.
+    \item \textbf{MAP Backtrace Validation:} The MAP inference correctly identifies that when the Alarm rings, the most probable explanation is \texttt{Burglary=True} and \texttt{Earthquake=False} with a probability of $0.009212$. The detailed backtrace confirms that leaf nodes without evidence (like \texttt{JohnCalls} and \texttt{MaryCalls}) are efficiently summed out to $1.0$, acting as a massive optimization.
+\end{itemize}
+
+\subsection{EM Optimizations and Plausibility}
+During my EM runs, a major optimization became apparent in the logs. The system successfully compresses the dataset: out of 500 samples, it identified exactly \textbf{218 unique rows}. By running the E-step only on these unique rows and multiplying by their frequency, the time complexity of the algorithm was drastically reduced.
+
+Furthermore, the code cleanly separates variables. It identifies which nodes need EM updates (those connected to the hidden variables \texttt{LNM} and \texttt{MyometrialInvasion}) versus which nodes can be fixed purely by Maximum Likelihood Estimation (MLE) directly from the observed data.
+
+The comparison with the original Endorisk model confirms that the learned CPTs changed in a meaningful way. The largest differences show up in nodes like \texttt{LNM}, \texttt{CA125}, and \texttt{Recurrence}, which is what I expected from EM when hidden variables are involved.
+
+\section{Implementation of the formative feedback}
+I used the formative feedback to add some things:
+
+\subsection{Feedback 1: Improve elimination ordering}
+\begin{itemize}
+    \item I replaced the fixed ordering with the min-fill style ordering.
+    \item I reused this ordering idea in VE, MAP, and aligned the EM inference calls with it.
+\end{itemize}
+\textbf{Observed Effect:} The peak size of intermediate factors drastically decreased. Runtime became much more stable, avoiding out-of-memory errors on larger evidence sets.
+
+\subsection{Feedback 2: Improve informative logging}
+\begin{itemize}
+    \item I added detailed MAP logs: factor buckets, products, elimination/maximization steps, and backtrace traces.
+    \item I added detailed EM logs: run settings, restart seeds, progress lines, per-iteration likelihood, and best run summaries.
+\end{itemize}
+\textbf{Observed Effect:} Debugging became much faster. Sensitive bugs felt more "real" and visible, and experiment comparison became as simple as reading \texttt{log\_endorisk.txt}.
+
+\section{Conclusion}
+To conclude, I implemented a complete Bayesian network pipeline for Variable Elimination, MAP estimation, and EM parameter learning. The greatest improvements during development were the shift to heuristic elimination ordering and the implementation of comprehensive logging, mainly because they transformed the project from a black box into something I could actually check and explain. The min-fill heuristic helped keep the inference parts manageable, and the EM comparison script showed that the learned network differs from the original in its parameter values!
+
+\end{document}
